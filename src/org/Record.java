@@ -54,4 +54,14 @@ public class Record {
         System.out.println(str);
 
     }
+
+    @Override
+    public String toString() {
+        return "Record{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
