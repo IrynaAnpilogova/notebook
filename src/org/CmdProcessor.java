@@ -1,6 +1,5 @@
 package org;
 
-
 import java.io.*;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -33,11 +32,12 @@ public class CmdProcessor {
                 cmdPrint();
             } else if (cmdName.equals("save")) {
                 cmdSave();
-            } else if(cmdName.equals("load")) {
+            } else if (cmdName.equals("load")) {
                 cmdLoad();
             }
         }
         cmdSave();
+
     }
 
     private void cmdAdd() {
@@ -59,9 +59,34 @@ public class CmdProcessor {
         scanner.nextLine();
     }
 
-    private void cmdSearch() throws IOException, ClassNotFoundException {
+    private void cmdSearch() {
 
-        System.out.println("This feature is under construction. Press Enter to continue");
+        while (true) {
+
+            System.out.println("Enter data for search:  ");
+            String search = scanner.nextLine();
+            ArrayList<Record> searchResult = new ArrayList<>();
+            for (Record record : records) {
+                if (record.getFirstName().contains(search) || record.getLastName().contains(search) ||
+                        record.getEmail().contains(search) || record.getPhoneNumber().contains(search)) {
+                    searchResult.add(record);
+                }
+            }
+            if (searchResult.size() == 0) {
+                System.out.println("No Data");
+            } else {
+                for (Record record : searchResult) {
+                    record.recordView();
+                }
+            }
+
+            System.out.println("Press enter to continue search or 'return' to return to the main menu  :");
+            String cmd = scanner.nextLine();
+            if (cmd.equals("return"))
+                break;
+
+        }
+
     }
 
     private void cmdPrint() {
@@ -77,7 +102,7 @@ public class CmdProcessor {
     private void cmdSave() {
 
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(("notebook.txt"), true));
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(("notebook.txt")));
 
             for (Record record : records) {
                 objectOutputStream.writeObject(record);
@@ -88,15 +113,15 @@ public class CmdProcessor {
             e.printStackTrace();
         }
 
-
     }
-    private void cmdLoad(){
+
+    private void cmdLoad() {
         try {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("notebook.txt"));
             records.clear();
-            while(true) {
+            while (true) {
                 Object read = objectInputStream.readObject();
-                if(read == null)
+                if (read == null)
                     break;
                 Record record = (Record) read;
                 records.add(record);
@@ -108,4 +133,30 @@ public class CmdProcessor {
         }
     }
 
+
+
 }
+
+
+//        if (search.equals("Name")) {
+//            System.out.println("Enter Name: ");
+//            String Name = scanner.nextLine();
+//
+//            for (Record record: records) {
+//                if (record.getFirstName().equals(Name)) {
+//                    searchResult.add(record);
+//                } else {
+//                    continue;
+//                }
+//            }
+//            if (searchResult.size() == 0) {
+//                System.out.println("No Data");
+//            } else {
+//                for (Record record : searchResult) {
+//                    record.recordView();
+//                }
+//            }
+//
+//            System.out.print("Press enter to continue.");
+//            scanner.nextLine();
+//        }
