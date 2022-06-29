@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class CmdProcessor {
     private Scanner scanner = new Scanner(System.in);
     private ArrayList<Record> records = new ArrayList<>();
+    private ArrayList<Record> searchResult = new ArrayList<>();
 
     public void run() throws IOException, ClassNotFoundException {
         cmdLoad();
@@ -19,6 +20,7 @@ public class CmdProcessor {
                     "exit - exit application\n" +
                     "save - save record(s)\n" +
                     "load - load records\n" +
+                    "edit - edit record\n" +
                     "> ");
             String cmdName = scanner.nextLine();
 
@@ -34,6 +36,8 @@ public class CmdProcessor {
                 cmdSave();
             } else if (cmdName.equals("load")) {
                 cmdLoad();
+            } else if (cmdName.equals("edit")) {
+                cmdEdit();
             }
         }
         cmdSave();
@@ -43,14 +47,17 @@ public class CmdProcessor {
     private void cmdAdd() {
         System.out.print("Enter First Name: ");
         String firstName = scanner.nextLine();
+
         System.out.print("Enter Last Name: ");
         String lastName = scanner.nextLine();
+
         System.out.print("Enter Phone Number: ");
         String phoneNumber = scanner.nextLine();
+
         System.out.print("Enter Email: ");
         String email = scanner.nextLine();
 
-        Record record = new Record(firstName, lastName, email, phoneNumber);
+        Record record = new Record(firstName, lastName,  phoneNumber, email);
         System.out.print("New record in a phone book: ");
         record.recordView();
         records.add(record);
@@ -63,9 +70,10 @@ public class CmdProcessor {
 
         while (true) {
 
+
             System.out.println("Enter data for search:  ");
             String search = scanner.nextLine();
-            ArrayList<Record> searchResult = new ArrayList<>();
+
             for (Record record : records) {
                 if (record.getFirstName().contains(search) || record.getLastName().contains(search) ||
                         record.getEmail().contains(search) || record.getPhoneNumber().contains(search)) {
@@ -84,14 +92,16 @@ public class CmdProcessor {
             String cmd = scanner.nextLine();
             if (cmd.equals("return"))
                 break;
-
+//            if (cmd.equals("edit")) {
+//
+//            }
         }
-
     }
 
     private void cmdPrint() {
 
         for (Record record : records) {
+            System.out.print("ID: " + records.indexOf(record) + ", ");
             record.recordView();
         }
         System.out.print("Press enter to continue.");
@@ -127,36 +137,67 @@ public class CmdProcessor {
                 records.add(record);
             }
         } catch (IOException e) {
-            //e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    private void cmdEdit() {
+        while (true) {
+            for (Record record: records) {
+                System.out.print("ID: " + records.indexOf(record) + ", ");
+                record.recordView();
+            }
+
+            System.out.println("Enter the ID of the record you would like to edit: ");
+            int ID = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println(records.get(ID));
+
+            System.out.println("Enter the Name or press enter: ");
+            String newName = scanner.nextLine();
+
+            if (newName.length() > 0) {
+                records.get(ID).setFirstName(newName);
+            }
+
+            System.out.println("Enter the Last Name or press enter: ");
+            String newLastName = scanner.nextLine();
+
+            if (newLastName.length() > 0) {
+                records.get(ID).setLastName(newLastName);
+            }
+
+            System.out.println("Enter the Phone Number or press enter: ");
+            String newPhoneNumber = scanner.nextLine();
+
+            if (newPhoneNumber.length() > 0) {
+                records.get(ID).setPhoneNumber(newPhoneNumber);
+            }
+
+            System.out.println("Enter Email or press enter: ");
+            String newEmail = scanner.nextLine();
+
+            if (newEmail.length() > 0) {
+                records.get(ID).setEmail(newEmail);
+            }
+
+            System.out.print("The edited record in a phone book: ");
+            records.get(ID).recordView();
+
+            System.out.print("Press enter to continue or 'return' to return to main menu: ");
+            String cmd = scanner.nextLine();
+            if (cmd.equals("return")) {
+                break;
+            }
+
+
+        }
+
+
+    }
 
 
 }
 
 
-//        if (search.equals("Name")) {
-//            System.out.println("Enter Name: ");
-//            String Name = scanner.nextLine();
-//
-//            for (Record record: records) {
-//                if (record.getFirstName().equals(Name)) {
-//                    searchResult.add(record);
-//                } else {
-//                    continue;
-//                }
-//            }
-//            if (searchResult.size() == 0) {
-//                System.out.println("No Data");
-//            } else {
-//                for (Record record : searchResult) {
-//                    record.recordView();
-//                }
-//            }
-//
-//            System.out.print("Press enter to continue.");
-//            scanner.nextLine();
-//        }

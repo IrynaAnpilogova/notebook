@@ -52,10 +52,11 @@ public class Record implements Serializable {
     }
 
     public void recordView(){
-        String str = String.format("Name: %s %s, email: %s, phone: %s", firstName, lastName, email, phoneNumber);
+        String str = String.format("Name: %s %s, phone: %s, email: %s", firstName, lastName, phoneNumber, email);
         System.out.println(str);
 
     }
+
 
     @Override
     public String toString() {

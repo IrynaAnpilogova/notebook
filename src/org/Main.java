@@ -7,10 +7,9 @@ public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 
+//        Record record = new Record("Lora", "Smith","546843543543" , "lsmith@gmail.com");
+//        record.recordView();
 
-
-           //	Record record = new Record("Lora", "Smith", "lsmith@gmail.com", "675 9874318");
-           //        record.toString();
         CmdProcessor processor = new CmdProcessor();
         processor.run();
     }
