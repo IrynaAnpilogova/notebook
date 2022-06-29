@@ -104,7 +104,7 @@ public class CmdProcessor {
             System.out.print("ID: " + records.indexOf(record) + ", ");
             record.recordView();
         }
-        System.out.print("Press enter to continue.");
+        System.out.println("Press enter to continue.");
         scanner.nextLine();
 
     }
@@ -149,44 +149,51 @@ public class CmdProcessor {
                 record.recordView();
             }
 
-            System.out.println("Enter the ID of the record you would like to edit: ");
+            System.out.println("Enter ID of the record you would like to edit or delete: ");
             int ID = scanner.nextInt();
             scanner.nextLine();
             System.out.println(records.get(ID));
 
-            System.out.println("Enter the Name or press enter: ");
-            String newName = scanner.nextLine();
-
-            if (newName.length() > 0) {
-                records.get(ID).setFirstName(newName);
-            }
-
-            System.out.println("Enter the Last Name or press enter: ");
-            String newLastName = scanner.nextLine();
-
-            if (newLastName.length() > 0) {
-                records.get(ID).setLastName(newLastName);
-            }
-
-            System.out.println("Enter the Phone Number or press enter: ");
-            String newPhoneNumber = scanner.nextLine();
-
-            if (newPhoneNumber.length() > 0) {
-                records.get(ID).setPhoneNumber(newPhoneNumber);
-            }
-
-            System.out.println("Enter Email or press enter: ");
-            String newEmail = scanner.nextLine();
-
-            if (newEmail.length() > 0) {
-                records.get(ID).setEmail(newEmail);
-            }
-
-            System.out.print("The edited record in a phone book: ");
-            records.get(ID).recordView();
-
-            System.out.print("Press enter to continue or 'return' to return to main menu: ");
+            System.out.println("Enter 'edit' or 'delete' record:");
             String cmd = scanner.nextLine();
+
+            if (cmd.equals("delete")) {
+                records.remove(ID);
+            } else if (cmd.equals("edit")) {
+                System.out.println("Enter the Name or press enter: ");
+                String newName = scanner.nextLine();
+
+                if (newName.length() > 0) {
+                    records.get(ID).setFirstName(newName);
+                }
+
+                System.out.println("Enter the Last Name or press enter: ");
+                String newLastName = scanner.nextLine();
+
+                if (newLastName.length() > 0) {
+                    records.get(ID).setLastName(newLastName);
+                }
+
+                System.out.println("Enter the Phone Number or press enter: ");
+                String newPhoneNumber = scanner.nextLine();
+
+                if (newPhoneNumber.length() > 0) {
+                    records.get(ID).setPhoneNumber(newPhoneNumber);
+                }
+
+                System.out.println("Enter Email or press enter: ");
+                String newEmail = scanner.nextLine();
+
+                if (newEmail.length() > 0) {
+                    records.get(ID).setEmail(newEmail);
+                }
+
+                System.out.println("The edited record in a phone book: ");
+                records.get(ID).recordView();
+            }
+
+            System.out.println("Press enter to continue or 'return' to return to main menu: ");
+            cmd = scanner.nextLine();
             if (cmd.equals("return")) {
                 break;
             }
