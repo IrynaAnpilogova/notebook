@@ -3,12 +3,15 @@ package org;
 import java.io.*;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CmdProcessor {
     private Scanner scanner = new Scanner(System.in);
     private ArrayList<Record> records = new ArrayList<>();
     private ArrayList<Record> searchResult = new ArrayList<>();
+
+
 
     public void run() throws IOException, ClassNotFoundException {
         cmdLoad();
@@ -57,7 +60,7 @@ public class CmdProcessor {
         System.out.print("Enter Email: ");
         String email = scanner.nextLine();
 
-        Record record = new Record(firstName, lastName,  phoneNumber, email);
+        Record record = new Record(firstName, lastName, phoneNumber, email);
         System.out.print("New record in a phone book: ");
         record.recordView();
         records.add(record);
@@ -67,14 +70,23 @@ public class CmdProcessor {
     }
 
     private void cmdSearch() {
+        String search;
 
         while (true) {
 
+            while (true) {
+                System.out.print("Enter data for search:  ");
+                search = scanner.nextLine();
+                if (search.length() != 0) {
+                    break;
+                }
+            }
 
-            System.out.println("Enter data for search:  ");
-            String search = scanner.nextLine();
-
+            searchResult.clear();
             for (Record record : records) {
+                if (search.length() == 0) {
+                    break;
+                }
                 if (record.getFirstName().contains(search) || record.getLastName().contains(search) ||
                         record.getEmail().contains(search) || record.getPhoneNumber().contains(search)) {
                     searchResult.add(record);
@@ -88,13 +100,11 @@ public class CmdProcessor {
                 }
             }
 
-            System.out.println("Press enter to continue search or 'return' to return to the main menu  :");
+            System.out.print("Press enter to continue search or 'return' to return to the main menu  :");
             String cmd = scanner.nextLine();
             if (cmd.equals("return"))
                 break;
-//            if (cmd.equals("edit")) {
-//
-//            }
+
         }
     }
 
@@ -143,58 +153,82 @@ public class CmdProcessor {
     }
 
     private void cmdEdit() {
+        String stringID;
+        int ID;
+
         while (true) {
-            for (Record record: records) {
+
+            for (Record record : records) {
                 System.out.print("ID: " + records.indexOf(record) + ", ");
                 record.recordView();
             }
 
-            System.out.println("Enter ID of the record you would like to edit or delete: ");
-            int ID = scanner.nextInt();
-            scanner.nextLine();
-            System.out.println(records.get(ID));
+            while (true) {
+                System.out.print("Enter ID of the record you would like to edit or delete: ");
+                stringID = scanner.nextLine();
+                if (stringID.length() != 0) {
+                    break;
+                }
+            }
+            ID = Integer.parseInt(stringID);
+            System.out.println(ID);
 
-            System.out.println("Enter 'edit' or 'delete' record:");
+
+            while (ID > records.size() - 1 || ID < 0) {
+                System.out.println("You have entered wrong ID!");
+                System.out.println("Enter ID of the record you would like to edit or delete: ");
+                ID = scanner.nextInt();
+                scanner.nextLine();
+
+            }
+            records.get(ID).recordView();
+
+
+
+            System.out.print("Enter 'edit' or 'delete' record:");
             String cmd = scanner.nextLine();
 
             if (cmd.equals("delete")) {
+                System.out.println("The record " + records.get(ID) + " was deleted");
                 records.remove(ID);
+
             } else if (cmd.equals("edit")) {
-                System.out.println("Enter the Name or press enter: ");
+
+                System.out.println("The Name you are about to change is: " + "'" + records.get(ID).getFirstName() + "'" + ". Enter the new Name or press enter: ");
                 String newName = scanner.nextLine();
 
                 if (newName.length() > 0) {
                     records.get(ID).setFirstName(newName);
                 }
 
-                System.out.println("Enter the Last Name or press enter: ");
+                System.out.println("The Last Name you are about to change is: " + "'" + records.get(ID).getLastName() + "'" + ". Enter the Last Name or press enter: ");
                 String newLastName = scanner.nextLine();
 
                 if (newLastName.length() > 0) {
                     records.get(ID).setLastName(newLastName);
                 }
 
-                System.out.println("Enter the Phone Number or press enter: ");
+                System.out.println("The Phone Number you are about to change is: " + "'" + records.get(ID).getPhoneNumber() + "'" + ". Enter the Phone Number or press enter: ");
                 String newPhoneNumber = scanner.nextLine();
 
                 if (newPhoneNumber.length() > 0) {
                     records.get(ID).setPhoneNumber(newPhoneNumber);
                 }
 
-                System.out.println("Enter Email or press enter: ");
+                System.out.println("The Email you are about to change is: " + "'" + records.get(ID).getEmail() + "'" + ". Enter Email or press enter: ");
                 String newEmail = scanner.nextLine();
 
                 if (newEmail.length() > 0) {
                     records.get(ID).setEmail(newEmail);
                 }
 
-                System.out.println("The edited record in a phone book: ");
+                System.out.print("The edited record in a phone book: ");
                 records.get(ID).recordView();
             }
 
             System.out.println("Press enter to continue or 'return' to return to main menu: ");
             cmd = scanner.nextLine();
-            if (cmd.equals("return")) {
+            if (cmd.equals("return") ) {
                 break;
             }
 
