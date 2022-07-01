@@ -48,17 +48,40 @@ public class CmdProcessor {
     }
 
     private void cmdAdd() {
-        System.out.print("Enter First Name: ");
-        String firstName = scanner.nextLine();
+        String firstName;
+        String lastName;
+        String phoneNumber;
+        String email;
 
-        System.out.print("Enter Last Name: ");
-        String lastName = scanner.nextLine();
+        while (true) {
+            System.out.print("Enter First Name: ");
+            firstName = scanner.nextLine();
 
-        System.out.print("Enter Phone Number: ");
-        String phoneNumber = scanner.nextLine();
+            System.out.print("Enter Last Name: ");
+            lastName = scanner.nextLine();
 
-        System.out.print("Enter Email: ");
-        String email = scanner.nextLine();
+            System.out.print("Enter Phone Number: ");
+            phoneNumber = scanner.nextLine();
+
+            System.out.print("Enter Email: ");
+            email = scanner.nextLine();
+
+            //validate user input and display error message
+            System.out.println("Validate result: ");
+
+            if (!ValidateInput.validateFirstName(firstName)) {
+                System.out.println("Invalid First Name");
+            } else if (!ValidateInput.validateLastName(lastName)) {
+                System.out.println("Invalid Last Name");
+            } else if (!ValidateInput.validatePhoneNumber(phoneNumber)) {
+                System.out.println("Invalid Phone Number");
+            } else if (!ValidateInput.validateEmail(email)) {
+                System.out.println("Invalid Email");
+            } else {
+                System.out.println("Valid input.Thank you!");
+                break;
+            }
+        }
 
         Record record = new Record(firstName, lastName, phoneNumber, email);
         System.out.print("New record in a phone book: ");
@@ -153,9 +176,7 @@ public class CmdProcessor {
     }
 
     private void cmdEdit() {
-        String stringID;
         int ID;
-
         while (true) {
 
             for (Record record : records) {
@@ -165,27 +186,29 @@ public class CmdProcessor {
 
             while (true) {
                 System.out.print("Enter ID of the record you would like to edit or delete: ");
-                stringID = scanner.nextLine();
-                if (stringID.length() != 0) {
-                    break;
+                String value = scanner.nextLine();
+                if (value.matches("^[0-9]+$")) {
+                    System.out.println("valid");
+                    ID = Integer.parseInt(value);
+                    System.out.println(ID);
+
+                    if (ID > records.size() -1 || ID < 0) {
+                        System.out.println("You have entered wrong ID! You ID is out of range.");
+                        continue;
+                    } else {
+                        break;
+                    }
+
+                } else {
+                    System.out.println("not valid");
+                    continue;
                 }
             }
-            ID = Integer.parseInt(stringID);
-            System.out.println(ID);
 
 
-            while (ID > records.size() - 1 || ID < 0) {
-                System.out.println("You have entered wrong ID!");
-                System.out.println("Enter ID of the record you would like to edit or delete: ");
-                ID = scanner.nextInt();
-                scanner.nextLine();
-
-            }
             records.get(ID).recordView();
 
-
-
-            System.out.print("Enter 'edit' or 'delete' record:");
+            System.out.print("Enter 'edit' or 'delete' record: ");
             String cmd = scanner.nextLine();
 
             if (cmd.equals("delete")) {
